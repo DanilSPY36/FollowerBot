@@ -5,184 +5,105 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using FollowerBot.DataBase;
 using Telegram.Bot.Types.ReplyMarkups;
-
+using System.Security.Permissions;
+using FollowerBot;
+using System;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+//7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs
 class Program
 {
-    private static ITelegramBotClient botClient;
-    private static ReceiverOptions receiverOptions;
-    private static SQLiteScript sql;
+    private static ITelegramBotClient _botClient;
+    private static ReceiverOptions _receiverOptions;
+    private static BotMenu _botMenu;
+    private static DbContextOptionsBuilder<DrinkTTKDbContext> builder;
+   
     static async Task Main()
     {
-        sql = new SQLiteScript();
-        sql.createDB();
-        botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
-        receiverOptions = new ReceiverOptions
+        builder = new DbContextOptionsBuilder<DrinkTTKDbContext>();
+        
+        builder.UseNpgsql("DefaultConnection");
+
+        var options = builder.Options;
+        using (var context = new DrinkTTKDbContext(options))
+        {
+        }
+        _botMenu = new BotMenu();
+        _botClient = new TelegramBotClient("7190916687:AAG4L9eYwyj8bLJtXajo6uTP-k-MuIkRdIs");
+
+
+        _receiverOptions = new ReceiverOptions 
         {
             AllowedUpdates = new[]
             {
                 UpdateType.Message,
                 UpdateType.CallbackQuery
             },
+
             ThrowPendingUpdates = true,
         };
+
+
         using var cts = new CancellationTokenSource();
-
-        botClient.StartReceiving(UpdateHandler, ErrorHandler, receiverOptions, cts.Token);
-        Console.ReadKey();
+        _botClient.StartReceiving(UpdateHandler, ErrorHandler, _receiverOptions, cts.Token); 
+        var me = await _botClient.GetMeAsync(); 
+        Console.WriteLine($"{me.FirstName} запущен!");
+        await Task.Delay(-1);
     }
-
     private static async Task UpdateHandler(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+        if (update.Type == UpdateType.Message && update.Message.Type == MessageType.Text)
+        {
+            var message = update.Message;
+
+            if (message.From.IsBot == false)
+            {
+                await HandleNewUser(message);
+            }
+        }
         try
         {
+           
             switch (update.Type)
             {
                 case UpdateType.Message:
                     {
                         var message = update.Message;
                         var user = message.From;
-                        var chat = message.Chat;
+                        var chatInfo = message.Chat;
 
-                        switch (message.Type)
-                        {   
-                            case MessageType.Unknown:
+                        switch (message.Text)
+                        {
+                            case "/start":
+                                await botClient.SendTextMessageAsync(chatInfo.Id, "Твоя главная клавиатура.", replyMarkup: _botMenu.StartMenu());
+                                Console.WriteLine($"{user.Username} Send: {message.Text}");
                                 break;
-                            case MessageType.Text:
-                                if (message.Text == "/start")
-                                {
-                                    await botClient.SendTextMessageAsync(
-                                        chat.Id,
-                                        "Выбери клавиатуру:\n" +
-                                        "/inline\n" +
-                                        "/reply\n");
-                                    return;
-                                }
-                                if (message.Text == "/inline")
-                                {
-                                    // Тут создаем нашу клавиатуру
-                                    var inlineKeyboard = new InlineKeyboardMarkup(
-                                        new List<InlineKeyboardButton[]>() // здесь создаем лист (массив), который содрежит в себе массив из класса кнопок
-                                        {
-                                        // Каждый новый массив - это дополнительные строки,
-                                        // а каждая дополнительная строка (кнопка) в массиве - это добавление ряда
-
-                                        new InlineKeyboardButton[] // тут создаем массив кнопок
-                                        {
-                                            InlineKeyboardButton.WithCallbackData("список поставщиков:", "ShippersBtn"),
-                                        },
-                                        new InlineKeyboardButton[]
-                                        {
-                                            InlineKeyboardButton.WithCallbackData("ТТК", "ttkBtn")
-                                        },
-                                        });
-                                    await botClient.SendTextMessageAsync(
-                                    chat.Id,
-                                    "Это inline клавиатура!",
-                                    replyMarkup: inlineKeyboard); // Все клавиатуры передаются в параметр replyMarkup
-
-                                    return;
-                                }
-                                if (message.Text == "/reply")
-                                {
-                                    // Тут все аналогично Inline клавиатуре, только меняются классы
-                                    // НО! Тут потребуется дополнительно указать один параметр, чтобы
-                                    // клавиатура выглядела нормально, а не как абы что
-
-                                    var replyKeyboard = new ReplyKeyboardMarkup(
-                                        new List<KeyboardButton[]>()
-                                        {
-                                        new KeyboardButton[]
-                                        {
-                                            new KeyboardButton("Привет!"),
-                                            new KeyboardButton("Пока!"),
-                                        },
-                                        new KeyboardButton[]
-                                        {
-                                            new KeyboardButton("Позвони мне!")
-                                        },
-                                        new KeyboardButton[]
-                                        {
-                                            new KeyboardButton("Напиши моему соседу!")
-                                        }
-                                        })
-                                    {
-                                        // автоматическое изменение размера клавиатуры, если не стоит true,
-                                        // тогда клавиатура растягивается чуть ли не до луны,
-                                        // проверить можете сами
-                                        ResizeKeyboard = true,
-                                    };
-
-                                    await botClient.SendTextMessageAsync(
-                                        chat.Id,
-                                        "Это reply клавиатура!",
-                                        replyMarkup: replyKeyboard); // опять передаем клавиатуру в параметр replyMarkup
-
-                                    return;
-                                }
-                                    break;
+                            case "base products":
+                                await botClient.SendTextMessageAsync(chatInfo.Id, "Тут все продукты батончики, бутылочные напитки и выпечка", replyMarkup: _botMenu.BaseListMenu());
+                                Console.WriteLine($"{user.Username} Send: {message.Text}");
+                                break;
+                            case "TTK":
+                                await botClient.SendTextMessageAsync(chatInfo.Id, "Тут все ттк, все то что ты должен знать, как Отче наш", replyMarkup: _botMenu.TTKMenu());
+                                Console.WriteLine($"{user.Username} Send: {message.Text}");
+                                break;
+                            case "shippers":
+                                await botClient.SendTextMessageAsync(chatInfo.Id, "Тут все твои поставщики", replyMarkup: _botMenu.ShippersMenu(5));
+                                Console.WriteLine($"{user.Username} Send: {message.Text}");
+                                break;
                             default:
                                 break;
                         }
+                        
+                        
                         return;
                     }
-                case UpdateType.CallbackQuery: 
+                case UpdateType.CallbackQuery:
                     {
-                        var callbackQuery = update.CallbackQuery;
-                        var user = callbackQuery.From;
-                        Console.WriteLine($"{user.FirstName} ({user.Id}) нажал на кнопку: {callbackQuery.Data}");
-                        var chat = callbackQuery.Message.Chat;
-                        switch (callbackQuery.Data)
-                        {
-                            // Data - это придуманный нами id кнопки, мы его указывали в параметре
-                            // callbackData при создании кнопок. У меня это button1, button2 и button3
-
-                            case "ShippersBtn":
-                                {
-                                    // В этом типе клавиатуры обязательно нужно использовать следующий метод
-                                    await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                                    // Для того, чтобы отправить телеграмму запрос, что мы нажали на кнопку
-                                    var chatId = callbackQuery.Message.Chat.Id;
-                                    var newInlineKeyboard = new InlineKeyboardMarkup
-                                        (
-                                             new List<InlineKeyboardButton[]>()
-                                                {
-                                                    new InlineKeyboardButton[]
-                                                    {
-                                                        InlineKeyboardButton.WithCallbackData("ИП Судин", "Shipper1"),
-                                                    },
-                                                    new InlineKeyboardButton[]
-                                                    {
-                                                        InlineKeyboardButton.WithCallbackData("...", "newButton2"),
-                                                    }
-                                                }
-                                        );
-                                    //await botClient.SendTextMessageAsync(chat.Id, $"Вы нажали на {callbackQuery.Data}");
-                                    await botClient.SendTextMessageAsync(chatId, "Поставщики", replyMarkup: newInlineKeyboard);
-                                    return;
-                                }
-                            case "Shipper1":
-                                {
-                                    await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
-                                    var chatId = callbackQuery.Message.Chat.Id;
-                                    for(int i = 0; i < 3; i++)
-                                    {
-                                        await botClient.SendTextMessageAsync(chat.Id, $"{sql.getFood(1)[i]}");
-                                    }
-                                    return;
-                                }
-
-                            case "ttkBtn":
-                                {
-                                    // А здесь мы добавляем наш сообственный текст, который заменит слово "загрузка", когда мы нажмем на кнопку
-                                    await botClient.AnswerCallbackQueryAsync(callbackQuery.Id, "Тут может быть ваш текст!");
-
-                                    await botClient.SendTextMessageAsync(
-                                        chat.Id,
-                                        $"Вы нажали на {callbackQuery.Data}");
-                                    return;
-                                }
-                        }
-
+                        return;
+                    }
+                case UpdateType.InlineQuery:
+                    {
                         return;
                     }
             }
@@ -192,10 +113,8 @@ class Program
             Console.WriteLine(ex.ToString());
         }
     }
-
     private static Task ErrorHandler(ITelegramBotClient botClient, Exception error, CancellationToken cancellationToken)
     {
-        // Тут создадим переменную, в которую поместим код ошибки и её сообщение 
         var ErrorMessage = error switch
         {
             ApiRequestException apiRequestException
@@ -206,6 +125,9 @@ class Program
         Console.WriteLine(ErrorMessage);
         return Task.CompletedTask;
     }
-
-
+    private static async Task HandleNewUser(Message message)
+    {
+        var chatId = message.Chat.Id;
+        await _botClient.SendTextMessageAsync(chatId, "/start");
+    }
 }
