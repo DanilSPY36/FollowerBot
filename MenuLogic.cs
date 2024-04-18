@@ -1,9 +1,10 @@
-﻿using Telegram.Bot;
+﻿using FollowerBot.Models;
+using Microsoft.EntityFrameworkCore;
+using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using FollowerBot.DataBase;
 using Telegram.Bot.Types.ReplyMarkups;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -14,7 +15,18 @@ public class BotMenu
     private InlineKeyboardMarkup? baseListMenu;
     private InlineKeyboardMarkup? shippersMenu;
     private InlineKeyboardMarkup? ttkMenu;
+    private InlineKeyboardMarkup? itemsShipperMenu;
 
+    public List<Items> itemsList = null!;
+    public List<Shipper> shipperList = null!;
+    public List<DrinkTTK> drinkList = null!;
+
+    public BotMenu(Context _context) 
+    {
+        this.itemsList = new List<Items>(_context.Items.ToList());
+        shipperList = _context.Shippers.ToList();
+
+    }
     public ReplyKeyboardMarkup StartMenu()
     {
         var buttonRows = new List<KeyboardButton[]>()
@@ -50,16 +62,17 @@ public class BotMenu
             });
         return baseListMenu;
     }
-    public InlineKeyboardMarkup ShippersMenu(int shippersAmount)
+    public InlineKeyboardMarkup ShippersMenu(List<Shipper> shippers)
     {
         List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
 
-        for (int i = 0; i < shippersAmount; i++)
+
+        foreach (var ship in shippers)
         {
             var button = new InlineKeyboardButton("shippers menu")
             {
-                Text = $"Button {i + 1}",
-                CallbackData = $"button_{i + 1}"
+                Text = $"{ship.ID} || {ship.Name}",
+                CallbackData = $"shipper||{ship.ID}"
             };
             buttonRows.Add(new List<InlineKeyboardButton> { button });
         }
@@ -91,5 +104,34 @@ public class BotMenu
         ttkMenu = new InlineKeyboardMarkup(buttonRows);
 
         return ttkMenu;
+    }
+    public InlineKeyboardMarkup ItemsShipperMenu(List<Items> items, int shipperId)
+    {
+        List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
+
+        foreach (var item in items)
+        {
+            //Console.WriteLine(item.ShipperId + "||" + shipperId);
+            if(item.ShipperId == shipperId)
+            {
+                var button = new InlineKeyboardButton("List items menu")
+                {
+                    Text = $"{item.Name}",
+                    CallbackData = $"item||{item.Id}"
+                };
+                buttonRows.Add(new List<InlineKeyboardButton> { button });
+            }
+        }
+
+        itemsShipperMenu = new InlineKeyboardMarkup(buttonRows);
+
+        return itemsShipperMenu;
+    }
+
+    public Items returnItemInfo()
+    {
+
+
+        return null;
     }
 }

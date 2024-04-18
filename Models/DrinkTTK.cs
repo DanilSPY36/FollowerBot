@@ -8,7 +8,7 @@ namespace FollowerBot.Models
 {
     public class DrinkTTK
     {
-        public Guid ID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; } = string.Empty; // описание 
         public string HowToCook { get; set; } = string.Empty;// как готовить 
