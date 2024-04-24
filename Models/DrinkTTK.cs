@@ -16,6 +16,7 @@ namespace FollowerBot.Models
         public string Description { get; set; } = string.Empty; // описание 
         public string Ingridients { get; set; } = string.Empty; // ингридиенты 
         public string HowToCook { get; set; } = string.Empty;// как готовить 
+        public string ?Weight {  get; set; } = string.Empty; // выход
         public string ContainerId { get; set; } = string.Empty;// тара
         public string Addivitives { get; set; } = string.Empty; // добавки 
         public string Blank {  get; set; } = string.Empty;// заготовка

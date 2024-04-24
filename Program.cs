@@ -31,8 +31,16 @@ class Program
         _ttkContext.Database.EnsureCreated();
         _shippersContext.Database.EnsureCreated();
 
+        try
+        {
         _ttkContext.DrinkTTKs.Load();
-        
+
+        }
+        catch(Exception ex) 
+        {
+            Console.WriteLine(ex.ToString());
+        }
+
         _ttkContext.DimCategories.Load();
         _ttkContext.DimContainers.Load();
         _ttkContext.DimVolumes.Load();
