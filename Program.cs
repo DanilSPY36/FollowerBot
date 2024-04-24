@@ -124,14 +124,14 @@ class Program
                             var choseCategoryId = callbackQuery.Data.Split("||");
                             await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
                             Console.WriteLine($"{choseCategoryId[0]} || {choseCategoryId[1]}");
-                            await botClient.SendTextMessageAsync(chat.Id, "список :", replyMarkup: _botMenu.TTKDrinkMenu(_ttkContext.DrinkTTKs.ToList(), int.Parse(choseCategoryId[1])));
+                            await botClient.SendTextMessageAsync(chat.Id, "список :", replyMarkup: _botMenu.TTKDrinkMenu(_ttkContext, int.Parse(choseCategoryId[1])));
                         }
                         if (callbackQuery.Data.Contains("drink"))
                         {
                             var choseCategoryId = callbackQuery.Data.Split("||");
                             await botClient.AnswerCallbackQueryAsync(callbackQuery.Id);
                             Console.WriteLine($"{choseCategoryId[0]} || {choseCategoryId[1]}");
-                            await botClient.SendTextMessageAsync(chat.Id, "список :", replyMarkup: _botMenu.TTKDrinkMenu(_ttkContext.DrinkTTKs.ToList(), int.Parse(choseCategoryId[1])));
+                            await botClient.SendTextMessageAsync(chat.Id, "список :", replyMarkup: _botMenu.TTKDrinkMenu(_ttkContext, int.Parse(choseCategoryId[1])));
                         }
                         if (callbackQuery.Data.Contains("shipper"))
                         {

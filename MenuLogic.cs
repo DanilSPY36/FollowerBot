@@ -1,5 +1,6 @@
 ﻿using FollowerBot.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -22,7 +23,6 @@ public class BotMenu
 
     public List<Items> itemsList = null!;
     public List<Shipper> shipperList = null!;
-    public List<DrinkTTK> drinkList = null!;
 
     public BotMenu(ShippersContext _context) 
     {
@@ -125,28 +125,39 @@ public class BotMenu
         return categoryMenu;
     }
 
-    public InlineKeyboardMarkup TTKDrinkMenu(List<DrinkTTK> drinkTTKs, int categoryId)
+    public InlineKeyboardMarkup TTKDrinkMenu(TTK_Context _ttkContext, int categoryId)
     {
-        InlineKeyboardButton[][] buttonRows = new InlineKeyboardButton[drinkTTKs.Count][];
+        var drinkTTKs = _ttkContext.DrinkTTKs.ToList();
+        var volumesDrinks = _ttkContext.DimVolumes.ToList();
+        List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
 
-        // Остальной код остается без изменений
-
+        var adderDrinkNames = new List<string>();
         foreach (var drink in drinkTTKs)
         {
-            Console.WriteLine(drink.CategoryId + "||" + categoryId);
             if (drink.CategoryId == categoryId)
             {
-                var button = new InlineKeyboardButton("list ttk menu")
+                if (!adderDrinkNames.Contains(drink.Name))
                 {
-                    Text = $"{drink.Name}",
-                    CallbackData = $"drink||{drink.ID}"
-                };
-                // Используйте массив для добавления кнопки в соответствующий ряд
-                buttonRows = buttonRows.Append(new InlineKeyboardButton[] { button }).ToArray();
+                    adderDrinkNames.Add(drink.Name);
+
+                    List<InlineKeyboardButton> row = new List<InlineKeyboardButton>();
+                    for (int i = 0; i < drinkTTKs.Count; i++)
+                    {
+                        if (drink.Name == drinkTTKs[i].Name)
+                        {
+                            var button = new InlineKeyboardButton("list ttk menu")
+                            {
+                                Text = $"{drinkTTKs[i].Name} {volumesDrinks[drinkTTKs[i].VolumeId - 1].Volume}",
+                                CallbackData = $"drink||{drinkTTKs[i].ID}"
+                            };
+                            row.Add(button);
+                        }
+                    }
+                    buttonRows.Add(row);
+                }
             }
         }
         ttkDrinkMenu = new InlineKeyboardMarkup(buttonRows);
-
         return ttkDrinkMenu;
     }
 
