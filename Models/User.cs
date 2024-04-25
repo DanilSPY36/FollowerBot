@@ -9,7 +9,6 @@
     public long tgUserId { get; set; } = 0;
     public string? Country { get; set; } = string.Empty; // страна 
     public string? City {  get; set; } = string.Empty; // город
-    public string? SpotName { get; set; } = string.Empty; // название спота
     public string? Position {  get; set; } = string.Empty; // должность на споте (управ, бариста, стажер)
     public bool IsAdmin { get; set; } = false;
     public byte AccessUser { get; set; } = 0; // 0 - отказ //  1 временный пользлватель (тестировочный) // 2 - супер пользовталеь
