@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="P:\Visual Studio 2022\sours\repos\Job_projects\FollowerBot\bin\Debug\net7.0\TTK_DB.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="pragmas browser query" current="1"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2534"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,9:mainDrinkTTKs"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="DimCategories" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort><column index="1" mode="0"/></sort><column_widths><column index="1" value="103"/><column index="2" value="257"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="DimContainers" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="134"/><column index="2" value="603"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="DimVolumes" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="40"/><column index="2" value="55"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="DrinkTTKs" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort><column index="1" mode="0"/></sort><column_widths><column index="1" value="40"/><column index="2" value="112"/><column index="3" value="81"/><column index="4" value="68"/><column index="5" value="51"/><column index="6" value="81"/><column index="7" value="166"/><column index="8" value="82"/><column index="9" value="84"/><column index="10" value="225"/><column index="11" value="75"/><column index="12" value="53"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats><column index="1" value=""/></display_formats><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="CatigoriesAdder.sql">INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (1, 'Весна 2024');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (2, 'Классика кофе');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (3, 'Драфт');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (4, 'Кофе и миксы');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (5, 'Чайные и чайные напитки');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (6, 'Фруктовые');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (7, 'Детское');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (8, 'Какао бобы в банке');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (9, 'Каши');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (10,'Выпечка');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (11, 'Йогурты');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (12, 'Чиа-пудинги');
+INSERT INTO &quot;DimCategories&quot; (Id, Category) VALUES (13, 'Хот-доги');</sql><sql name="DimContainersAdder.sql">INSERT INTO &quot;DimContainers&quot; (Id, Container) VALUES (1,'Б\С 200 мл/Крышка');
+INSERT INTO &quot;DimContainers&quot; (Id, Container) VALUES (2,'Б\С 300 мл/Крышка');
+INSERT INTO &quot;DimContainers&quot; (Id, Container) VALUES (3,'Б\С 400 мл/Крышка');
+INSERT INTO &quot;DimContainers&quot; (Id, Container) VALUES (4,'П\С 300 мл Прозрачная плоская крышка');
+INSERT INTO &quot;DimContainers&quot; (Id, Container) VALUES (5,'П\С 400 мл Прозрачная плоская крышка');
+INSERT INTO &quot;DimContainers&quot; (Id, Container) VALUES (6,'контейнер круглый (боул) 500 Мл');
+INSERT INTO &quot;DimContainers&quot; (Id, Container) VALUES (7,'Ложка, 2 фирменные салфетки, стакан 0,3, менажница, плоская крышка, этикетка');
+INSERT INTO &quot;DimContainers&quot; (Id, Container) VALUES (8,'Стакан объемом 200мл плоская крышка без отверстия');
+INSERT INTO &quot;DimContainers&quot; (Id, Container) VALUES (9,'Лодочкa с фирменной бумажной салфеткой');</sql><sql name="DimVolumesAdder.sql">INSERT INTO &quot;DimVolumes&quot; (Id, Volume) VALUES (1, '0,2');
+INSERT INTO &quot;DimVolumes&quot; (Id, Volume) VALUES (2, '0,3');
+INSERT INTO &quot;DimVolumes&quot; (Id, Volume) VALUES (3, '0,4');
+</sql><sql name="SQL 4">INSERT INTO &quot;main&quot;.&quot;DrinkTTKs&quot; (&quot;Name&quot;, &quot;CategoryId&quot;, &quot;VolumeId&quot;, &quot;SpotId&quot;, &quot;Description&quot;, &quot;Ingridients&quot;, &quot;HowToCook&quot;, &quot;ContainerId&quot;, &quot;Addivitives&quot;, &quot;Blank&quot;, &quot;Photos&quot;) VALUES ('Фильтр Кофе', '2', '3', '0', 'Фильтр-кофе, или батч-брю (batch brew), – это черный кофе, мягкий по вкусу и быстрый в отдаче, обладающий разными вкусовыми оттенками, заложенными природой и обжарщиком, которые раскрываются с помощью альтернативного способа приготовления – через фильтр-машину.', 'моносорт Цикорий и Доски - 60 гр
+бумажный фильтр - 1 шт
+фильтрованная вода с низким ppm (50-150)  - 1000 мл', 'Смалываем необходимое кол-во кофе (помол как крупная соль). Берем чашу, вставляем бумажный фильтр, смачиваем его горячей водой, чтобы убрать &quot;бумажный&quot; вкус. В фильтр засыпаем молотый кофе и разравниваем  для равномерной экстракции. В специальную емкость наливаем норму воды. ', '1', 'ванильный сахар 5 гр.
+сахар шт
+корица
+сироп топинамбура 10 гр.
+сироп в ассортименте 10 мл.
+шот эспрессо
+шарик мороженного 50 гр.
+сливки 11% 50 мл.
+молоко 50 мл.
+растительное молоко 50 мл.
+лимон 10 гр.
+лайм 10 гр.
+апельсин 10 гр.
+основа 10гр.
+', '-', '');</sql><current_tab id="3"/></tab_sql></sqlb_project>

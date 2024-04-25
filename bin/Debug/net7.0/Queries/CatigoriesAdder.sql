@@ -1,0 +1,13 @@
+INSERT INTO "DimCategories" (Id, Category) VALUES (1, 'Весна 2024');
+INSERT INTO "DimCategories" (Id, Category) VALUES (2, 'Классика кофе');
+INSERT INTO "DimCategories" (Id, Category) VALUES (3, 'Драфт');
+INSERT INTO "DimCategories" (Id, Category) VALUES (4, 'Кофе и миксы');
+INSERT INTO "DimCategories" (Id, Category) VALUES (5, 'Чайные и чайные напитки');
+INSERT INTO "DimCategories" (Id, Category) VALUES (6, 'Фруктовые');
+INSERT INTO "DimCategories" (Id, Category) VALUES (7, 'Детское');
+INSERT INTO "DimCategories" (Id, Category) VALUES (8, 'Какао бобы в банке');
+INSERT INTO "DimCategories" (Id, Category) VALUES (9, 'Каши');
+INSERT INTO "DimCategories" (Id, Category) VALUES (10,'Выпечка');
+INSERT INTO "DimCategories" (Id, Category) VALUES (11, 'Йогурты');
+INSERT INTO "DimCategories" (Id, Category) VALUES (12, 'Чиа-пудинги');
+INSERT INTO "DimCategories" (Id, Category) VALUES (13, 'Хот-доги');
