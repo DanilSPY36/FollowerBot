@@ -22,7 +22,7 @@ class Program
 
     private static TTK_Context _ttkContext;
     private static ShippersContext _shippersContext;
-    public static List<InviteUser> inviteUsers = null!;
+    public static List<User> inviteUsers = null!;
     static async Task Main()
     {
         _ttkContext = new TTK_Context();
