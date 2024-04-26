@@ -2,7 +2,7 @@
 
 public class SpotsContext : DbContext
 {
-    public DbSet<Spot> Spots { get; set; } = null!;
+    public DbSet<Spot> SpotsInfo { get; set; } = null!;
     public DbSet<Position> Positions { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
 

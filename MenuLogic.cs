@@ -19,11 +19,16 @@ public class BotMenu
     private InlineKeyboardMarkup? itemsShipperMenu;
     private InlineKeyboardMarkup? ttkDrinkMenu;
 
+    private InlineKeyboardMarkup? registrationMenu;
 
 
     public List<Items> itemsList = null!;
     public List<Shipper> shipperList = null!;
 
+    public List<Spot> spotList = null!;
+    public List<User> userList = null!;
+    public List<Position> positionList = null!;
+ 
     public BotMenu(ShippersContext _context) 
     {
         this.itemsList = _context.Items.ToList();
@@ -124,7 +129,6 @@ public class BotMenu
 
         return categoryMenu;
     }
-
     public InlineKeyboardMarkup TTKDrinkMenu(TTK_Context _ttkContext, int categoryId)
     {
         var drinkTTKs = _ttkContext.DrinkTTKs.ToList();
@@ -148,7 +152,7 @@ public class BotMenu
                             var button = new InlineKeyboardButton("list ttk menu")
                             {
                                 Text = $"{drinkTTKs[i].Name} {volumesDrinks[drinkTTKs[i].VolumeId - 1].Volume}",
-                                CallbackData = $"drink||{drinkTTKs[i].ID}"
+                                CallbackData = $"drink||{drinkTTKs[i].Id}"
                             };
                             row.Add(button);
                         }
@@ -161,8 +165,26 @@ public class BotMenu
         return ttkDrinkMenu;
     }
 
-    public Items returnItemInfo()
+    public InlineKeyboardMarkup RegistrationMenu()
     {
-        return null;
+        List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>()
+        {
+            new List<InlineKeyboardButton>() 
+            {
+                new InlineKeyboardButton("reg Menu")
+                {
+                    Text = "Информация о боте",
+                    CallbackData = "BotInfobtn"
+                },
+                new InlineKeyboardButton("reg Menu")
+                {
+                    Text = "Зарегистрироваться",
+                    CallbackData = "regbtn"
+                }
+            }
+        };
+
+        registrationMenu = new InlineKeyboardMarkup(buttonRows);
+        return registrationMenu;
     }
 }
